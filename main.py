@@ -24,9 +24,12 @@ async def AI_chat(sentence):
         return await ddgs.achat(sentence, model='gpt-4o-mini')
     
 @app.get("/get_ai_chat")
-async def get_ai_chat(sentence: str):
-    answer = await AI_chat(sentence)
-    return {"Anwser" : answer}
+async def get_ai_chat(sentences: str = Query(description="Các câu, cách nhau bằng dấu `,`")):
+    sentences = [s.strip() for s in sentences.split(",")] 
+    tasks = [AI_chat(s) for s in sentences]
+    answers = await asyncio.gather(*tasks)
+    return {"answers" : dict(zip(sentences, answers))}
+    
 
 # if __name__ == "__main__":
 #     asyncio.run(get_asearch("Sơn tùng, Jack", 2))
