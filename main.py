@@ -19,9 +19,15 @@ async def get_asearch(words: str = Query(description="Danh sách từ khóa, cá
 
 
 
-# async def AI_chat(sentence):
-#     async with AsyncDDGS() as ddgs:  
-#         return await ddgs.achat(sentence, model='gpt-4o-mini')
-# print(asyncio.run(AI_chat("Sơn tùng mtp là ai")))
+async def AI_chat(sentence):
+    async with AsyncDDGS() as ddgs:  
+        return await ddgs.achat(sentence, model='gpt-4o-mini')
+    
+@app.get("/get_ai_chat")
+async def get_ai_chat(sentence: str):
+    answer = await AI_chat(sentence)
+    return {"Anwser" : answer}
+
 # if __name__ == "__main__":
 #     asyncio.run(get_asearch("Sơn tùng, Jack", 2))
+# print(asyncio.run(AI_chat("Sơn tùng mtp là ai")))
